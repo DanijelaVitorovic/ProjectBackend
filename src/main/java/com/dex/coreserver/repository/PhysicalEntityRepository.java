@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface PhysicalEntityRepository extends JpaRepository<PhysicalEntity,Long> {
 
-    PhysicalEntity findByUsername(String username);
-
-    List<PhysicalEntity> findByIsDeletedOrderByIdAsc(boolean b);
 }
