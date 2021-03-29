@@ -11,8 +11,7 @@ public class CoreserverApplication {
 	BCryptPasswordEncoder bCryptPasswordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
-	public static void main(String[] args) {
-		SpringApplication.run(CoreserverApplication.class, args);
+	public static void main(String[] args) { SpringApplication.run(CoreserverApplication.class, args);
 	}
 
 }
