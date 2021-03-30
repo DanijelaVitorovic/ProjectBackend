@@ -2,6 +2,7 @@ package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.LegalEntity;
 import com.dex.coreserver.model.User;
+import com.dex.coreserver.service.LegalEntityService;
 import com.dex.coreserver.service.LegalEntityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +18,18 @@ import java.util.List;
 public class LegalEntityController {
 
     @Autowired
-    private LegalEntityServiceImpl legalEntityService;
+    private LegalEntityService legalEntityService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createNewEntity(@Valid @RequestBody LegalEntity legalEntity, @PathVariable String username){
-        LegalEntity legalEntity1 = legalEntityService.create(legalEntity, username);
-       return new ResponseEntity<LegalEntity>(legalEntity1, HttpStatus.CREATED);
+        LegalEntity createdLegalEntity = legalEntityService.create(legalEntity, username);
+        return new ResponseEntity<LegalEntity>(createdLegalEntity, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getEntity(@PathVariable Long id) {
-        LegalEntity legalEntity = legalEntityService.findById(id);
-        return new ResponseEntity<LegalEntity>( legalEntity, HttpStatus.OK);
+    @PostMapping("/update")
+    public ResponseEntity<?> updateNewEntity(@Valid @RequestBody LegalEntity legalEntity, @PathVariable String username){
+        LegalEntity updatedLegalEntity = legalEntityService.update(legalEntity, username);
+        return new ResponseEntity<LegalEntity>(updatedLegalEntity, HttpStatus.CREATED);
     }
 
     @GetMapping("/findAll")
@@ -45,7 +46,7 @@ public class LegalEntityController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteLegalEntity(@PathVariable Long id, Principal principal){
+    public void delete(@PathVariable Long id, Principal principal){
         legalEntityService.delete(id,principal.getName());
     }
 
