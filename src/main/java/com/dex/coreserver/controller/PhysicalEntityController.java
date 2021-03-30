@@ -31,7 +31,7 @@ public class PhysicalEntityController {
         userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        PhysicalEntity physicalEntity1 = physicalEntityService.create(physicalEntity, principal.getName());
+        physicalEntityService.create(physicalEntity, principal.getName());
         return new ResponseEntity<PhysicalEntity>(physicalEntity, HttpStatus.CREATED);
     }
     @PostMapping("/update")
@@ -39,7 +39,7 @@ public class PhysicalEntityController {
         userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        PhysicalEntity updatedPhysicalEntity = physicalEntityService.update(physicalEntity, principal.getName());
+        physicalEntityService.update(physicalEntity, principal.getName());
         return new ResponseEntity<PhysicalEntity>(physicalEntity, HttpStatus.CREATED);
     }
     @GetMapping("/findAll")
