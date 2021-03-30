@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/legalentity")
+@RequestMapping("/api/legalEntity")
 public class LegalEntityController {
 
     @Autowired
@@ -21,18 +21,20 @@ public class LegalEntityController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createNewEntity(@Valid @RequestBody LegalEntity legalEntity, @PathVariable String username){
-       return new ResponseEntity<LegalEntity>(legalEntityService.create(legalEntity, username), HttpStatus.CREATED);
+        LegalEntity legalEntity1 = legalEntityService.create(legalEntity, username);
+       return new ResponseEntity<LegalEntity>(legalEntity1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{entity_id}")
-    public ResponseEntity<?> getEntity(@PathVariable Long entity_id) {
-        return new ResponseEntity<LegalEntity>(legalEntityService.findById(entity_id), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEntity(@PathVariable Long id) {
+        LegalEntity legalEntity = legalEntityService.findById(id);
+        return new ResponseEntity<LegalEntity>( legalEntity, HttpStatus.OK);
     }
 
     @GetMapping("/findAll")
     public List<LegalEntity> findAll(LegalEntity legalEntity) {
-
-        return legalEntityService.findAll(legalEntity.getName());
+        List<LegalEntity> legalEntities = legalEntityService.findAll(legalEntity.getEmail());
+        return legalEntities;
     }
 
     @GetMapping("/find/{id}")
@@ -40,7 +42,6 @@ public class LegalEntityController {
         LegalEntity legalEntity = legalEntityService.findById(id);
         return new ResponseEntity<LegalEntity>(legalEntity, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)

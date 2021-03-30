@@ -14,16 +14,15 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LegalEntity extends  AbstractDataModel{
 
-    @NotBlank(message = "name ff")
+    @NotBlank(message = "Ime je obavezno polje")
     private String name;
 
     @Column(unique = true)
-    @NotBlank(message = "pib jdjd")
     private String pib;
 
     private String registrationNumber;
 
-    @Email(message = "email")
+    @Email(message = "E-mail nije unet u propisanom formatu!")
     @NotBlank
     private String email;
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LegalEntityServiceImpl implements LegalEntityService {
@@ -16,17 +15,11 @@ public class LegalEntityServiceImpl implements LegalEntityService {
 
     @Override
     public LegalEntity create(LegalEntity entity, String username) {
-        try{
-            return legalEntityRepository.save(entity);
-
-        }catch (Exception ex)  {
-            throw new RuntimeException("vec psotoji");
-        }
+        return legalEntityRepository.save(entity);
     }
 
     @Override
     public LegalEntity update(LegalEntity entity, String username) {
-
         return legalEntityRepository.save(entity);
     }
 
