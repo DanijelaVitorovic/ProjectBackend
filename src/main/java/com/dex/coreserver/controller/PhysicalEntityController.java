@@ -31,29 +31,34 @@ public class PhysicalEntityController {
         userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        physicalEntityService.create(physicalEntity, principal.getName());
-        return new ResponseEntity<PhysicalEntity>(physicalEntity, HttpStatus.CREATED);
+        PhysicalEntity newPhysicalEntity = physicalEntityService.create(physicalEntity, principal.getName());
+        return new ResponseEntity<PhysicalEntity>(newPhysicalEntity, HttpStatus.CREATED);
     }
+
     @PostMapping("/update")
     public ResponseEntity<?> update(@Valid @RequestBody PhysicalEntity physicalEntity, BindingResult result, Principal principal) {
         userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        physicalEntityService.update(physicalEntity, principal.getName());
-        return new ResponseEntity<PhysicalEntity>(physicalEntity, HttpStatus.CREATED);
+        PhysicalEntity updatePhysicalEntity =  physicalEntityService.update(physicalEntity, principal.getName());
+        return new ResponseEntity<PhysicalEntity>(updatePhysicalEntity, HttpStatus.CREATED);
     }
+
     @GetMapping("/findAll")
     public List<PhysicalEntity> findAll(Principal principal) {
         return physicalEntityService.findAll(principal.getName());
     }
+
     @GetMapping("/find/{id}")
     private ResponseEntity<?> findUserById(@PathVariable Long id, Principal principal) {
         PhysicalEntity physicalEntity = physicalEntityService.findById(id);
         return new ResponseEntity<PhysicalEntity>(physicalEntity, HttpStatus.OK);
     }
+
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable Long id, Principal principal){
         physicalEntityService.delete(id,principal.getName());
     }
+
 }

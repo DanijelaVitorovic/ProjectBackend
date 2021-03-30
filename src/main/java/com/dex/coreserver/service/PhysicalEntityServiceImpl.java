@@ -16,10 +16,12 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
     public PhysicalEntity create(PhysicalEntity entity, String username) {
         return physicalEntityRepository.save(entity);
     }
+
     @Override
     public PhysicalEntity update(PhysicalEntity entity, String username) {
         return physicalEntityRepository.save(entity);
     }
+
     @Override
     public void delete(Long id, String username) {
         physicalEntityRepository.deleteById(id);
@@ -34,4 +36,5 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
     public PhysicalEntity findById(Long id) {
         return physicalEntityRepository.findById(id).get();
     }
+
 }
