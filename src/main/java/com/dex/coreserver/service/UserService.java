@@ -4,7 +4,7 @@ import com.dex.coreserver.model.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService{
     User createUser(User user,String username);
     List<User> findAll(String username);
     List<User> findAllDeleted(String username);
