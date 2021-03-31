@@ -60,6 +60,6 @@ public class ProcessTypeController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
         processTypeService.delete(id, principal.getName());
-        return new ResponseEntity<String>("ProcessType deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("ProcessType deletegit d", HttpStatus.OK);
     }
 }
