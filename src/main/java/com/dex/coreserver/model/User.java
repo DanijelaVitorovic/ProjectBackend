@@ -70,6 +70,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name="role_id"))
     private List<Role> roles=new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonFormat
+    private Employee employee;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

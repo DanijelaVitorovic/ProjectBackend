@@ -1,5 +1,6 @@
 package com.dex.coreserver.service;
 
+import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.PhysicalEntity;
 import com.dex.coreserver.repository.PhysicalEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
     }
 
     @Override
-    public void delete(Long id, String username) {
+    public List<PhysicalEntity> delete(Long id, String username) {
         physicalEntityRepository.deleteById(id);
+        return physicalEntityRepository.findAll();
     }
 
     @Override
