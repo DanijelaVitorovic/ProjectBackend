@@ -4,9 +4,11 @@ import com.dex.coreserver.model.LegalEntity;
 import com.dex.coreserver.model.User;
 import com.dex.coreserver.service.LegalEntityService;
 import com.dex.coreserver.service.LegalEntityServiceImpl;
+import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,15 +22,28 @@ public class LegalEntityController {
     @Autowired
     private LegalEntityService legalEntityService;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
     @PostMapping("/create")
-    public ResponseEntity<?> createNewEntity(@Valid @RequestBody LegalEntity legalEntity, @PathVariable String username){
-        LegalEntity createdLegalEntity = legalEntityService.create(legalEntity, username);
+    public ResponseEntity<?> createNewEntity(@Valid @RequestBody LegalEntity legalEntity, BindingResult result, Principal principal){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+
+        if(errorMap  != null)
+            return errorMap;
+
+        LegalEntity createdLegalEntity = legalEntityService.create(legalEntity, principal.getName());
         return new ResponseEntity<LegalEntity>(createdLegalEntity, HttpStatus.CREATED);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateNewEntity(@Valid @RequestBody LegalEntity legalEntity, @PathVariable String username){
-        LegalEntity updatedLegalEntity = legalEntityService.update(legalEntity, username);
+    public ResponseEntity<?> updateNewEntity(@Valid @RequestBody LegalEntity legalEntity, BindingResult result, Principal principal){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+
+        if(errorMap  != null)
+            return errorMap;
+
+        LegalEntity updatedLegalEntity = legalEntityService.update(legalEntity, principal.getName());
         return new ResponseEntity<LegalEntity>(updatedLegalEntity, HttpStatus.CREATED);
     }
 

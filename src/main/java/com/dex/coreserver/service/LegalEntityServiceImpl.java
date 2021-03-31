@@ -1,6 +1,7 @@
 package com.dex.coreserver.service;
 
 import com.dex.coreserver.model.LegalEntity;
+import com.dex.coreserver.model.Statment;
 import com.dex.coreserver.repository.LegalEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
