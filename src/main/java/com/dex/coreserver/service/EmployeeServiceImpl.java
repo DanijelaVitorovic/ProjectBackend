@@ -23,7 +23,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> delete(Long id, String username) {
+    public void delete(Long id, String username) {
+
+    }
+
+    public List<Employee> deleteEById(Long id, String username) {
         employeeRepository.deleteById(id);
         return employeeRepository.findAll();
     }

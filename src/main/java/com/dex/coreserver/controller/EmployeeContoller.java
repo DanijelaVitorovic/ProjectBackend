@@ -2,6 +2,7 @@ package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.service.EmployeeService;
+import com.dex.coreserver.service.EmployeeServiceImpl;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,10 @@ public class EmployeeContoller {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeServiceImpl employeeServiceImpl;
+
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -52,6 +57,6 @@ public class EmployeeContoller {
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> deleteEmployer(@PathVariable Long id, Principal principal){
-        return employeeService.delete(id,principal.getName());
+        return employeeServiceImpl.deleteEById(id,principal.getName());
     }
 }

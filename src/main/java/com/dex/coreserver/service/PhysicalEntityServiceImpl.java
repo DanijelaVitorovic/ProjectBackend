@@ -24,7 +24,11 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
     }
 
     @Override
-    public List<PhysicalEntity> delete(Long id, String username) {
+    public void delete(Long id, String username) {
+
+    }
+
+    public List<PhysicalEntity> deletePEById(Long id, String username){
         physicalEntityRepository.deleteById(id);
         return physicalEntityRepository.findAll();
     }
