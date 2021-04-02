@@ -3,6 +3,7 @@ package com.dex.coreserver.controller;
 import com.dex.coreserver.model.PhysicalEntity;
 import com.dex.coreserver.service.MapValidationErrorService;
 import com.dex.coreserver.service.PhysicalEntityService;
+import com.dex.coreserver.service.PhysicalEntityServiceImpl;
 import com.dex.coreserver.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +24,8 @@ public class PhysicalEntityController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    UserValidator userValidator;
-
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody PhysicalEntity physicalEntity, BindingResult result, Principal principal) {
-        userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         PhysicalEntity newPhysicalEntity = physicalEntityService.create(physicalEntity, principal.getName());
@@ -37,7 +34,6 @@ public class PhysicalEntityController {
 
     @PostMapping("/update")
     public ResponseEntity<?> update(@Valid @RequestBody PhysicalEntity physicalEntity, BindingResult result, Principal principal) {
-        userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         PhysicalEntity updatePhysicalEntity =  physicalEntityService.update(physicalEntity, principal.getName());
@@ -57,8 +53,8 @@ public class PhysicalEntityController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable Long id, Principal principal){
-        physicalEntityService.delete(id,principal.getName());
+    public List<PhysicalEntity> delete(@PathVariable Long id, Principal principal){
+        return physicalEntityService.deleteByIdAndReturnFindAll(id,principal.getName());
     }
 
 }
