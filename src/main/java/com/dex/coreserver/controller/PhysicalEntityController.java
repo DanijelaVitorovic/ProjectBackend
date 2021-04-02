@@ -3,6 +3,7 @@ package com.dex.coreserver.controller;
 import com.dex.coreserver.model.PhysicalEntity;
 import com.dex.coreserver.service.MapValidationErrorService;
 import com.dex.coreserver.service.PhysicalEntityService;
+import com.dex.coreserver.service.PhysicalEntityServiceImpl;
 import com.dex.coreserver.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,8 +58,8 @@ public class PhysicalEntityController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable Long id, Principal principal){
-        physicalEntityService.delete(id,principal.getName());
+    public List<PhysicalEntity> delete(@PathVariable Long id, Principal principal){
+        return physicalEntityService.deleteByIdAndReturnFindAll(id,principal.getName());
     }
 
 }
