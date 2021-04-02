@@ -22,9 +22,6 @@ public class PhysicalEntityController {
     PhysicalEntityService physicalEntityService;
 
     @Autowired
-    PhysicalEntityServiceImpl physicalEntityServiceImpl;
-
-    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
     @Autowired
@@ -62,7 +59,7 @@ public class PhysicalEntityController {
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<PhysicalEntity> delete(@PathVariable Long id, Principal principal){
-        return physicalEntityServiceImpl.deletePEById(id,principal.getName());
+        return physicalEntityService.deleteByIdAndReturnFindAll(id,principal.getName());
     }
 
 }

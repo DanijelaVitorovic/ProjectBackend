@@ -16,7 +16,7 @@ public class Employee extends AbstractDataModel{
    private boolean manager;
 
    @OneToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name="userID",nullable = false)
+   @JoinColumn(name="userID")
    @JsonIgnore
    private User user;
    //PE dodati nakon mergea

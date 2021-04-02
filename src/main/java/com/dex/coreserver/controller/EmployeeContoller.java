@@ -21,10 +21,6 @@ public class EmployeeContoller {
     private EmployeeService employeeService;
 
     @Autowired
-    private EmployeeServiceImpl employeeServiceImpl;
-
-
-    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/create")
@@ -57,6 +53,6 @@ public class EmployeeContoller {
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> deleteEmployer(@PathVariable Long id, Principal principal){
-        return employeeServiceImpl.deleteEById(id,principal.getName());
+        return employeeService.deleteByIdAndReturnFindAll(id,principal.getName());
     }
 }

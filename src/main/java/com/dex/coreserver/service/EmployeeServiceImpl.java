@@ -23,14 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(Long id, String username) {
-
-    }
-
-    public List<Employee> deleteEById(Long id, String username) {
-        employeeRepository.deleteById(id);
-        return employeeRepository.findAll();
-    }
+    public void delete(Long id, String username) {}
 
     @Override
     public List<Employee> findAll(String username) {
@@ -40,5 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findById(Long id) {
         return employeeRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Employee> deleteByIdAndReturnFindAll(Long id, String username) {
+        employeeRepository.deleteById(id);
+        return employeeRepository.findAll();
     }
 }

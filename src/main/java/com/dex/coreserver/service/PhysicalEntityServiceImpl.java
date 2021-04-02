@@ -24,14 +24,7 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
     }
 
     @Override
-    public void delete(Long id, String username) {
-
-    }
-
-    public List<PhysicalEntity> deletePEById(Long id, String username){
-        physicalEntityRepository.deleteById(id);
-        return physicalEntityRepository.findAll();
-    }
+    public void delete(Long id, String username) {}
 
     @Override
     public List<PhysicalEntity> findAll(String username) {
@@ -43,4 +36,9 @@ public class PhysicalEntityServiceImpl implements PhysicalEntityService {
         return physicalEntityRepository.findById(id).get();
     }
 
+    @Override
+    public List<PhysicalEntity> deleteByIdAndReturnFindAll(Long id, String username) {
+        physicalEntityRepository.deleteById(id);
+        return physicalEntityRepository.findAll();
+    }
 }
