@@ -24,12 +24,8 @@ public class PhysicalEntityController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    UserValidator userValidator;
-
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody PhysicalEntity physicalEntity, BindingResult result, Principal principal) {
-        userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         PhysicalEntity newPhysicalEntity = physicalEntityService.create(physicalEntity, principal.getName());
@@ -38,7 +34,6 @@ public class PhysicalEntityController {
 
     @PostMapping("/update")
     public ResponseEntity<?> update(@Valid @RequestBody PhysicalEntity physicalEntity, BindingResult result, Principal principal) {
-        userValidator.validate(physicalEntity, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
         PhysicalEntity updatePhysicalEntity =  physicalEntityService.update(physicalEntity, principal.getName());
