@@ -30,8 +30,8 @@ public class ProcessTypeController {
         if (errorMap != null)
             return errorMap;
 
-        ProcessType createProcessType = processTypeService.create(processType, principal.getName());
-        return new ResponseEntity<ProcessType>(createProcessType, HttpStatus.CREATED);
+        ProcessType createdProcessType = processTypeService.create(processType, principal.getName());
+        return new ResponseEntity<ProcessType>(createdProcessType, HttpStatus.CREATED);
     }
 
     @PostMapping("/update")
@@ -41,8 +41,8 @@ public class ProcessTypeController {
         if(errorMap  != null)
             return errorMap;
 
-        ProcessType updateProcessType = processTypeService.update(processType, principal.getName());
-        return new ResponseEntity<ProcessType>(processType, HttpStatus.CREATED);
+        ProcessType updatedProcessType = processTypeService.update(processType, principal.getName());
+        return new ResponseEntity<ProcessType>(updatedProcessType, HttpStatus.CREATED);
     }
 
     @GetMapping("/find/{id}")
@@ -60,6 +60,6 @@ public class ProcessTypeController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
         processTypeService.delete(id, principal.getName());
-        return new ResponseEntity<String>("ProcessType deletegit d", HttpStatus.OK);
+        return new ResponseEntity<String>("ProcessType deletegit mgit d", HttpStatus.OK);
     }
 }

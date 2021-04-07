@@ -1,9 +1,7 @@
 package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.LegalEntity;
-import com.dex.coreserver.model.User;
 import com.dex.coreserver.service.LegalEntityService;
-import com.dex.coreserver.service.LegalEntityServiceImpl;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,8 +46,8 @@ public class LegalEntityController {
     }
 
     @GetMapping("/findAll")
-    public List<LegalEntity> findAll(LegalEntity legalEntity) {
-        List<LegalEntity> legalEntities = legalEntityService.findAll(legalEntity.getEmail());
+    public List<LegalEntity> findAll(Principal principal) {
+        List<LegalEntity> legalEntities = legalEntityService.findAll(principal.getName());
         return legalEntities;
     }
 
