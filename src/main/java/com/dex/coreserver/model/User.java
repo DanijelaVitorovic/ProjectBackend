@@ -1,6 +1,7 @@
 package com.dex.coreserver.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     private Date updatedAt;
     @JsonFormat(pattern = "dd.MM.yyyy")
     private Date lastLoginDate;
+
 
     @PrePersist
     protected void onCreate(){
