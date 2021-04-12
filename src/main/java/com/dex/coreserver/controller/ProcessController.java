@@ -62,7 +62,8 @@ public class ProcessController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
+        processService.delete(id, principal.getName());
         return new ResponseEntity<String>("Process deleted", HttpStatus.OK);
     }
 }
