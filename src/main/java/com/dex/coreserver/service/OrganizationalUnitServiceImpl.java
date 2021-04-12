@@ -1,6 +1,8 @@
 package com.dex.coreserver.service;
 
+import com.dex.coreserver.model.LegalEntity;
 import com.dex.coreserver.model.OrganizationalUnit;
+import com.dex.coreserver.repository.LegalEntityRepository;
 import com.dex.coreserver.repository.OrganizationalUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,20 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     @Autowired
     OrganizationalUnitRepository organizationalUnitRepository;
 
+    @Autowired
+    LegalEntityRepository legalEntityRepository;
+
     @Override
     public OrganizationalUnit create(OrganizationalUnit entity, String username) {
+        LegalEntity legalEntity = legalEntityRepository.findById(entity.getLegalEntity().getId()).get();
+        entity.setLegalEntity(legalEntity);
         return organizationalUnitRepository.save(entity);
     }
 
     @Override
     public OrganizationalUnit update(OrganizationalUnit entity, String username) {
+        LegalEntity legalEntity = legalEntityRepository.findById(entity.getLegalEntity().getId()).get();
+        entity.setLegalEntity(legalEntity);
         return organizationalUnitRepository.save(entity);
     }
 
