@@ -1,6 +1,8 @@
 package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.Employee;
+import com.dex.coreserver.model.PhysicalEntity;
+import com.dex.coreserver.model.User;
 import com.dex.coreserver.service.EmployeeService;
 import com.dex.coreserver.service.EmployeeServiceImpl;
 import com.dex.coreserver.service.MapValidationErrorService;
@@ -54,5 +56,10 @@ public class EmployeeContoller {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> deleteEmployer(@PathVariable Long id, Principal principal){
         return employeeService.deleteByIdAndReturnFindAll(id,principal.getName());
+    }
+
+    @GetMapping("/findAllUsersNotUsedAsForeignKeyInTableEmployee")
+    public List<User> findAllUsersNotUsedAsForeignKeyInTableEmployee() {
+        return employeeService.FindAllUsersNotUsedAsForeignKeyInTableEmployee();
     }
 }
