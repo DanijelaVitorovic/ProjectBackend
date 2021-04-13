@@ -25,13 +25,6 @@ public class CaseServiceImpl implements CaseService {
 
     @Override
     public Case create(Case newCase, String username) {
-
-        Employee employeeOwner = employeeRepository.findById(newCase.getOwner().getId()).get();
-        newCase.setOwner(employeeOwner);
-        Employee employeeProcessor = employeeRepository.findById(newCase.getProcessor().getId()).get();
-        newCase.setProcessor(employeeProcessor);
-        PhysicalEntity physicalEntityRefersTo = physicalEntityRepository.findById(newCase.getRefersTo().getId()).get();
-        newCase.setRefersTo(physicalEntityRefersTo);
         return caseRepository.save(newCase);
     }
 

@@ -15,8 +15,9 @@ public class Employee extends AbstractDataModel{
 
    @OneToOne(fetch = FetchType.EAGER)
    @JoinColumn(name="userID")
-   @JsonIgnore
    private User user;
-   //PE dodati nakon mergea
+
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+   private PhysicalEntity physicalEntity;
 
 }
