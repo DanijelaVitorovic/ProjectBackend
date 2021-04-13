@@ -29,8 +29,6 @@ public class EmployeeContoller {
     public ResponseEntity<?> create(@Valid @RequestBody Employee employee, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-        System.out.println("*****************************");
-        System.out.println(employee);
         Employee newEmployee = employeeService.create(employee, principal.getName());
         return new ResponseEntity<Employee>(newEmployee, HttpStatus.CREATED);
     }
