@@ -30,7 +30,6 @@ public class CaseServiceImpl implements CaseService {
 
     @Override
     public Case update(Case updatedCase, String username) {
-        System.out.println(updatedCase);
         return caseRepository.save(updatedCase);
     }
 
