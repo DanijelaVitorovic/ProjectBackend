@@ -49,10 +49,6 @@ public class User implements UserDetails {
         this.updatedAt = new Date();
     }
 
-    @NotBlank(message = "Morate uneti ime!")
-    private String firstName;
-    @NotBlank(message = "Morate uneti prezime!")
-    private String lastName;
     @Email(message = "E-mail nije unet u propisanom formatu!")
     @NotBlank(message = "Morate uneti e-mail adresu!")
     private String username;
