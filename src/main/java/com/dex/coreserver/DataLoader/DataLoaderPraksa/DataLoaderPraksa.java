@@ -67,8 +67,7 @@ public class DataLoaderPraksa implements CommandLineRunner {
             roleRepository.save(newRole);
 
             User newUser1 = new User();
-            newUser1.setFirstName("Sanja");
-            newUser1.setLastName("Djuaknovic");
+
             newUser1.setUsername("sanja.dj17@gmail.com");
             newUser1.setPassword(bCryptPasswordEncoder.encode("ssssss"));
             newUser1.setActive("DA");
@@ -78,8 +77,6 @@ public class DataLoaderPraksa implements CommandLineRunner {
             userRepository.save(newUser1);
 
             User newUser2 = new User();
-            newUser2.setFirstName("Marko");
-            newUser2.setLastName("Stepanovic");
             newUser2.setUsername("m@gmail.com");
             newUser2.setPassword(bCryptPasswordEncoder.encode("ssssss"));
             newUser2.setActive("DA");
