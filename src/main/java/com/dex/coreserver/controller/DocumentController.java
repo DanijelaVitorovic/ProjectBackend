@@ -1,6 +1,8 @@
 package com.dex.coreserver.controller;
 
+import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.Document;
+import com.dex.coreserver.service.CaseService;
 import com.dex.coreserver.service.DocumentService;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +64,16 @@ public class DocumentController {
     public ResponseEntity<?> delete(@PathVariable Long document_id, Principal principal) {
         documentService.delete(document_id, principal.getName());
         return new ResponseEntity<String>("Document deleted", HttpStatus.OK);
+    }
+
+    @PostMapping("/createDocumentWithCase")
+    public ResponseEntity<?> createDocumentWithCase(@Valid @RequestBody Document document, BindingResult result, Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+
+        if(errorMap  != null)
+            return errorMap;
+
+        Document createdDocument = documentService.createDocumentWithCase(document, principal.getName());
+        return new ResponseEntity<Document>(createdDocument, HttpStatus.CREATED);
     }
 }
