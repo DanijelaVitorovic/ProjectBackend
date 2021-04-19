@@ -59,4 +59,11 @@ public class DocumentServiceImpl implements DocumentService{
     public Document findById(Long id) {
         return documentRepository.findById(id).get();
     }
+
+    @Override
+    public List<Document> findDocumentByCaseId(Long id) {
+
+        Case newCase = caseRepository.findById(id).get();
+        return documentRepository.findBy_case(newCase);
+    }
 }
