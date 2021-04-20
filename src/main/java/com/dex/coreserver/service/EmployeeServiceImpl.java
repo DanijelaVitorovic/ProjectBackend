@@ -53,4 +53,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<User> lista = userRepository.findAllNotUsedAsForeignKeyInTableEmployee();
         return lista;
     }
+
+    @Override
+    public Employee findByUserId(Long userId) {
+        return employeeRepository.findByUserId(userId);
+    }
 }

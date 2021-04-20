@@ -10,4 +10,5 @@ public interface EmployeeService extends BasicService<Employee>{
     public List<Employee> deleteByIdAndReturnFindAll(Long id, String username);
     public List<User> FindAllUsersNotUsedAsForeignKeyInTableEmployee();
 
+    Employee findByUserId(Long id);
 }

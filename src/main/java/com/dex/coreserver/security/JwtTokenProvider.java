@@ -1,7 +1,10 @@
 package com.dex.coreserver.security;
 
+import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.User;
+import com.dex.coreserver.service.EmployeeService;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Date;
@@ -12,11 +15,17 @@ import static com.dex.coreserver.security.SecurityConstants.SECRET;
 
 @Component
 public class JwtTokenProvider {
+
+    @Autowired
+    EmployeeService employeeService;
+
     public String generateToken(Authentication authentication){
         User user = (User) authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
 
         Date expiryDate = new Date(now.getTime()+EXPIRATION_TIME);
+
+        Employee loggedEmployee = employeeService.findByUserId(user.getId());
 
         String userId = Long.toString(user.getId());
 
@@ -24,6 +33,7 @@ public class JwtTokenProvider {
         claims.put("id", (Long.toString(user.getId())));
         claims.put("username", user.getUsername());
         claims.put("roles", user.getRoles());
+        claims.put("loggedEmployeeId", loggedEmployee.getId());
 
         return Jwts.builder().setSubject(userId).setClaims(claims)
                 .setIssuedAt(now).setExpiration(expiryDate)
