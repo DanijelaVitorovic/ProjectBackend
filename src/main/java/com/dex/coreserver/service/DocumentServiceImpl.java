@@ -23,6 +23,9 @@ public class DocumentServiceImpl implements DocumentService{
     @Autowired
     private CaseRepository caseRepository;
 
+    @Autowired
+    private CaseService caseService;
+
     @Override
     public Document create(Document document, String username) {
         Employee employee = employeeRepository.findById(document.getEmployeeCreated().getId()).get();
@@ -65,5 +68,15 @@ public class DocumentServiceImpl implements DocumentService{
 
         Case newCase = caseRepository.findById(id).get();
         return documentRepository.findBy_case(newCase);
+    }
+
+    @Override
+    public Document createDocumentWithCase(Document document, String username) {
+        Case newCase= document.get_case();
+        Case createdCase = caseService.create(newCase, username);
+        document.set_case(createdCase);
+        Document createdDocument = create(document, username);
+        return createdDocument;
+
     }
 }

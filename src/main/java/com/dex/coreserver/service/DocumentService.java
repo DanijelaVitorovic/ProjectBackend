@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface DocumentService extends BasicService<Document> {
     public List<Document> findDocumentByCaseId(Long id);
+
+    Document createDocumentWithCase(Document document, String username);
+
 }
