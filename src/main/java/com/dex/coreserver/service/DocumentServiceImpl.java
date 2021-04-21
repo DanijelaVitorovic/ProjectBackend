@@ -64,11 +64,19 @@ public class DocumentServiceImpl implements DocumentService{
     }
 
     @Override
+    public List<Document> findDocumentByCaseId(Long id) {
+
+        Case newCase = caseRepository.findById(id).get();
+        return documentRepository.findBy_case(newCase);
+    }
+
+    @Override
     public Document createDocumentWithCase(Document document, String username) {
         Case newCase= document.get_case();
         Case createdCase = caseService.create(newCase, username);
         document.set_case(createdCase);
         Document createdDocument = create(document, username);
         return createdDocument;
+
     }
 }

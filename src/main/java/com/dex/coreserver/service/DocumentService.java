@@ -2,7 +2,11 @@ package com.dex.coreserver.service;
 
 import com.dex.coreserver.model.Document;
 
+import java.util.List;
+
 public interface DocumentService extends BasicService<Document> {
-    Document createDocumentWithCase(Document document, String username
-    );
+    public List<Document> findDocumentByCaseId(Long id);
+
+    Document createDocumentWithCase(Document document, String username);
+
 }

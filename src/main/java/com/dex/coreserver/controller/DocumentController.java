@@ -66,6 +66,13 @@ public class DocumentController {
         return new ResponseEntity<String>("Document deleted", HttpStatus.OK);
     }
 
+
+    @GetMapping("/findAllDocumentByCaseId/{id}")
+    public ResponseEntity<?> findAllDocumentByCaseId(@PathVariable Long id) {
+        List<Document> listOfDocuments = documentService.findDocumentByCaseId(id);
+        return new ResponseEntity<List<Document>>(listOfDocuments, HttpStatus.OK);
+    }
+
     @PostMapping("/createDocumentWithCase")
     public ResponseEntity<?> createDocumentWithCase(@Valid @RequestBody Document document, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -75,5 +82,6 @@ public class DocumentController {
 
         Document createdDocument = documentService.createDocumentWithCase(document, principal.getName());
         return new ResponseEntity<Document>(createdDocument, HttpStatus.CREATED);
+
     }
 }
