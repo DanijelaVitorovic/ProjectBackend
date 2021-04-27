@@ -6,6 +6,7 @@ import com.dex.coreserver.repository.LegalEntityRepository;
 import com.dex.coreserver.repository.OrganizationalUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,4 +47,5 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     public OrganizationalUnit findById(Long id) {
         return organizationalUnitRepository.findById(id).get();
     }
+
 }

@@ -1,6 +1,8 @@
 package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.OrganizationalUnit;
+import com.dex.coreserver.model.UniqueCodeValidator;
+import com.dex.coreserver.repository.OrganizationalUnitRepository;
 import com.dex.coreserver.service.MapValidationErrorService;
 import com.dex.coreserver.service.OrganizationalUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +20,26 @@ import java.util.List;
 public class OrganizationalUnitController {
 
     @Autowired
+    OrganizationalUnitRepository organizationalUnitRepository;
+
+    @Autowired
     OrganizationalUnitService organizationalUnitService;
 
     @Autowired
     MapValidationErrorService mapValidationErrorService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createNewOrganizationalUnit(@Valid @RequestBody OrganizationalUnit organizationalUnit, BindingResult result, Principal principal) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+    @Autowired
+    UniqueCodeValidator uniqueCodeValidator;
 
-        if(errorMap != null)
-            return errorMap;
+    @PostMapping("/create")
+    public ResponseEntity<?> createNewOrganizationalUnit(@Valid @RequestBody OrganizationalUnit organizationalUnit, BindingResult result, Principal principal) throws Exception {
+
+        if(organizationalUnitRepository.existsByCode(organizationalUnit.getCode())) {
+            throw new Exception("Organizaciona jedinica sa ovim kodom vec postoji");
+        }
 
         OrganizationalUnit createdOrganizationalUnit = organizationalUnitService.create(organizationalUnit,principal.getName());
+
         return new ResponseEntity<OrganizationalUnit>(createdOrganizationalUnit, HttpStatus.CREATED);
     }
 
@@ -62,4 +71,5 @@ public class OrganizationalUnitController {
         organizationalUnitService.delete(unit_id, principal.getName());
         return new ResponseEntity<String>("Organizational Unit deleted", HttpStatus.OK);
     }
+
 }
