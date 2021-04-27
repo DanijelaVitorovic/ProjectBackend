@@ -72,5 +72,4 @@ public class OrganizationalUnitController {
         return new ResponseEntity<String>("Organizational Unit deleted", HttpStatus.OK);
     }
 
-
 }

@@ -48,11 +48,4 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
         return organizationalUnitRepository.findById(id).get();
     }
 
-//    @Override
-//    @Transactional
-//    public boolean isCodeAlreadyInUse(String code){
-//        boolean organizationalUnitInDB = true;
-//        if (organizationalUnitRepository.getActiveOrganizationalUnit(code) != null) organizationalUnitInDB = false;
-//        return organizationalUnitInDB;
-//    }
 }

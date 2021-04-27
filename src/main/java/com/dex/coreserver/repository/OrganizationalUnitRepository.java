@@ -10,9 +10,5 @@ import java.util.List;
 
 @Repository
 public interface OrganizationalUnitRepository extends JpaRepository<OrganizationalUnit, Long> {
-
-//    @Query("from OrganizationalUnit where code = :code")
-//    List<OrganizationalUnit> getActiveOrganizationalUnit(@Param("code") String code);
-
     Boolean existsByCode(String code);
 }
