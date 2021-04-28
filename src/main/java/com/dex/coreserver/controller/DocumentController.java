@@ -82,7 +82,6 @@ public class DocumentController {
 
         Document createdDocument = documentService.createDocumentWithCase(document, principal.getName());
         return new ResponseEntity<Document>(createdDocument, HttpStatus.CREATED);
-
     }
 
     @PostMapping("/verification")

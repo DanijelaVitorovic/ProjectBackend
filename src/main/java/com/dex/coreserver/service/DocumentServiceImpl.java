@@ -10,8 +10,8 @@ import com.dex.coreserver.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import javax.print.Doc;
+import java.util.*;
 
 @Service
 public class DocumentServiceImpl implements DocumentService{
@@ -69,6 +69,19 @@ public class DocumentServiceImpl implements DocumentService{
     public List<Document> findDocumentByCaseId(Long id) {
 
         Case newCase = caseRepository.findById(id).get();
+
+        if(newCase == null)
+            throw  new RuntimeException("Case ne postoji!");
+
+        List<Document> documents =  documentRepository.findAll();
+        LinkedList<Document> documentByCase = new LinkedList<Document>();
+
+        for(Document d : documents) {
+            if(d.get_case().getId() == id) {
+                documentByCase.add(d);
+            }
+        }
+
         return documentRepository.findBy_case(newCase);
     }
 
@@ -79,7 +92,6 @@ public class DocumentServiceImpl implements DocumentService{
         document.set_case(createdCase);
         Document createdDocument = create(document, username);
         return createdDocument;
-
     }
 
     @Override

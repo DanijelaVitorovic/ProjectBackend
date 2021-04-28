@@ -32,7 +32,7 @@ public class OrganizationalUnitController {
     UniqueCodeValidator uniqueCodeValidator;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createNewOrganizationalUnit(@Valid @RequestBody OrganizationalUnit organizationalUnit, BindingResult result, Principal principal) throws Exception {
+    public ResponseEntity<?> createNewOrganizationalUnit(@Valid @RequestBody OrganizationalUnit organizationalUnit, Principal principal) throws Exception {
 
         if(organizationalUnitRepository.existsByCode(organizationalUnit.getCode())) {
             throw new Exception("Organizaciona jedinica sa ovim kodom vec postoji");
