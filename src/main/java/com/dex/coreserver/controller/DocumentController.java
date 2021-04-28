@@ -84,4 +84,29 @@ public class DocumentController {
         return new ResponseEntity<Document>(createdDocument, HttpStatus.CREATED);
 
     }
+
+    @PostMapping("/verification")
+    public ResponseEntity<?> verificationDocument(@Valid @RequestBody Document document, Principal principal) {
+        Document verifiedDocument = documentService.verificationDocument(document, principal.getName());
+        return new ResponseEntity<Document>(verifiedDocument, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/singing")
+    public ResponseEntity<?> signingDocument(@Valid @RequestBody Document document, Principal principal)  {
+        Document signingDocument = documentService.singingDocument(document, principal.getName());
+        return new ResponseEntity<Document>(signingDocument, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/singed")
+    public ResponseEntity<?> signedDocument(@Valid @RequestBody Document document, Principal principal) {
+        Document signedDocument = documentService.singedDocument(document, principal.getName());
+        return new ResponseEntity<Document>(signedDocument, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/final")
+    public  ResponseEntity<?> finalDocument(@Valid @RequestBody Document document, Principal principal) {
+        Document finalDocument = documentService.finalDocument(document, principal.getName());
+        return new ResponseEntity<Document>(finalDocument, HttpStatus.CREATED);
+
+    }
 }
