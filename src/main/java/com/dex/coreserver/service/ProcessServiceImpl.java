@@ -24,6 +24,8 @@ public class ProcessServiceImpl implements ProcessService{
 
     @Override
     public Process create(Process process, String username) {
+        ProcessType processType = processTypeRepository.findById(process.getProcessType().getId()).get();
+        process.setProcessType(processType);
         return processRepository.save(process);
     }
 
