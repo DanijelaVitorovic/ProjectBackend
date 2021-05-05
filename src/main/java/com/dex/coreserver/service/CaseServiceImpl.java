@@ -1,14 +1,12 @@
 package com.dex.coreserver.service;
 
-import com.dex.coreserver.model.Case;
-import com.dex.coreserver.model.Employee;
-import com.dex.coreserver.model.PhysicalEntity;
-import com.dex.coreserver.repository.CaseRepository;
-import com.dex.coreserver.repository.EmployeeRepository;
-import com.dex.coreserver.repository.PhysicalEntityRepository;
+import com.dex.coreserver.model.*;
+import com.dex.coreserver.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,10 +19,25 @@ public class CaseServiceImpl implements CaseService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CaseMovementRepository caseMovementRepository;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
     private PhysicalEntityRepository physicalEntityRepository;
 
     @Override
     public Case create(Case newCase, String username) {
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+        newCase.setOwner(foundEmployee);
+        newCase.setCaseState(Case.CaseState.TAKEOVER);
+
         return caseRepository.save(newCase);
     }
 
@@ -51,5 +64,29 @@ public class CaseServiceImpl implements CaseService {
     public List<Case> deleteByIdAndReturnFindAll(Long id, String username) {
         caseRepository.deleteById(id);
         return caseRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public CaseMovement addOwner(CaseMovement caseMovement, String username) throws Exception {
+
+        Case caseForUpdate= findById(caseMovement.get_case().getId());
+
+        if(caseMovementRepository.findBy_case(caseForUpdate)!=null){
+            throw new Exception("Vec je dodeljen vlasnik ili je na dodeli");
+        }
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
+        caseForUpdate.setCaseState(Case.CaseState.ASSIGN);
+
+        caseMovement.setEmployeeSend(foundEmployee);
+        caseMovement.setSendTime(new Date());
+        caseMovement.set_case(caseForUpdate);
+        caseMovement.setMovementState(CaseMovement.MovementState.SENT);
+        update(caseForUpdate, username);
+
+         return caseMovementRepository.save(caseMovement);
     }
 }

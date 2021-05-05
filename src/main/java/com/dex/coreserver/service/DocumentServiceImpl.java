@@ -69,19 +69,6 @@ public class DocumentServiceImpl implements DocumentService{
     public List<Document> findDocumentByCaseId(Long id) {
 
         Case newCase = caseRepository.findById(id).get();
-
-        if(newCase == null)
-            throw  new RuntimeException("Case ne postoji!");
-
-        List<Document> documents =  documentRepository.findAll();
-        LinkedList<Document> documentByCase = new LinkedList<Document>();
-
-        for(Document d : documents) {
-            if(d.get_case().getId() == id) {
-                documentByCase.add(d);
-            }
-        }
-
         return documentRepository.findBy_case(newCase);
     }
 
