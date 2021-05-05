@@ -7,8 +7,8 @@ import com.dex.coreserver.model.User;
 import java.util.List;
 
 public interface EmployeeService extends BasicService<Employee>{
-    public List<Employee> deleteByIdAndReturnFindAll(Long id, String username);
-    public List<User> FindAllUsersNotUsedAsForeignKeyInTableEmployee();
-
+    List<Employee> deleteByIdAndReturnFindAll(Long id, String username);
+    List<User> FindAllUsersNotUsedAsForeignKeyInTableEmployee();
     Employee findByUserId(Long id);
+    Employee findEmployeeByUser(User user);
 }

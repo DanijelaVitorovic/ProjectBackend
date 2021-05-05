@@ -12,4 +12,5 @@ public interface UserService{
     List<User>  activateUser(Long id,String username);
     List<User>  deleteUser(Long id,String username);
     User findUserById(Long id, String username);
+    User findUserByUsername(String username);
 }

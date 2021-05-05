@@ -1,6 +1,7 @@
 package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.Case;
+import com.dex.coreserver.model.CaseMovement;
 import com.dex.coreserver.service.CaseService;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,11 @@ public class CaseController {
     @ResponseStatus(HttpStatus.OK)
     public List<Case> deleteCase(@PathVariable Long id, Principal principal){
         return caseService.deleteByIdAndReturnFindAll(id,principal.getName());
+    }
+
+    @PostMapping("/addCaseOwner")
+    public ResponseEntity<?> addCaseOwner(@Valid @RequestBody CaseMovement newCaseMovement, Principal principal) throws Exception {
+        CaseMovement updatedCaseMovement = caseService.addOwner(newCaseMovement, principal.getName());
+        return new ResponseEntity<CaseMovement>(updatedCaseMovement,HttpStatus.OK);
     }
 }
