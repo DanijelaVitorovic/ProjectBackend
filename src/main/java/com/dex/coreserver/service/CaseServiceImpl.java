@@ -89,4 +89,35 @@ public class CaseServiceImpl implements CaseService {
 
          return caseMovementRepository.save(caseMovement);
     }
+
+    @Transactional
+    @Override
+    public CaseMovement addProcessor(CaseMovement caseMovement, String username) throws Exception {
+
+
+        try {
+            Case caseForUpdate= findById(caseMovement.get_case().getId());
+            CaseMovement caseMovementForUpdate = caseMovementRepository.findBy_case(caseForUpdate);
+            caseForUpdate.setCaseState(Case.CaseState.ASSIGN);
+            update(caseForUpdate, username);
+
+            if(caseMovementForUpdate==null){
+                throw new Exception("Prvo trebate dodeliti vlasnika");
+            }
+
+            if(caseMovementForUpdate.getEmployeeProcessor()!=null){
+                throw new Exception("Vec je dodeljen obradjivac ili je na dodeli");
+            }
+
+            caseMovementForUpdate.setEmployeeProcessor(caseMovement.getEmployeeProcessor());
+            caseMovementForUpdate.setSendTime(new Date());
+            caseMovementForUpdate.setMovementState(CaseMovement.MovementState.SENT);
+
+            return caseMovementRepository.save(caseMovementForUpdate);
+
+        }
+        catch (Exception ex){
+            throw new Exception("Predmet ne postoji!");
+        }
+    }
 }

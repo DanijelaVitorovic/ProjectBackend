@@ -31,4 +31,9 @@ public class CaseMovementController {
     public ResponseEntity<?> acceptCase(@PathVariable Long id, Principal principal) {
         return new ResponseEntity<CaseMovement>(caseMovementService.acceptCase(id, principal.getName()),HttpStatus.OK);
     }
+
+    @GetMapping("/findCaseMovementByCaseId/{id}")
+    public CaseMovement findCaseMovementByCaseId(@PathVariable Long id) {
+        return caseMovementService.findByCaseId(id);
+    }
 }

@@ -45,13 +45,18 @@ public class CaseMovementServiceImpl implements CaseMovementService{
         Case acceptedCase= caseMovement.get_case();
 
         if(caseMovement.getEmployeeOwner()!=null){
-            acceptedCase.setOwner(caseMovement.getEmployeeOwner());
-            }
+            acceptedCase.setOwner(caseMovement.getEmployeeOwner()); }
+
         if(caseMovement.getEmployeeProcessor()!=null){
-            acceptedCase.setProcessor(caseMovement.getEmployeeProcessor());
-        }
+            acceptedCase.setProcessor(caseMovement.getEmployeeProcessor()); }
+
         caseService.create(acceptedCase, username);
 
         return caseMovementRepository.save(caseMovement);
+    }
+
+    @Override
+    public CaseMovement findByCaseId(Long id) {
+        return caseMovementRepository.findBy_case(caseService.findById(id));
     }
 }
