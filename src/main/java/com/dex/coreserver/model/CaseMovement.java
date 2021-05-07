@@ -50,6 +50,4 @@ public class CaseMovement extends AbstractDataModel {
     @JoinColumn(name="employeeVerificator")
     Employee employeeVerificator;
     String notAcceptingForVerificationDescription;
-
-
 }

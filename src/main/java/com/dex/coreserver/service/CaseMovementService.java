@@ -7,4 +7,6 @@ import java.util.List;
 public interface CaseMovementService {
     CaseMovement acceptCase(Long id, String username);
     List<CaseMovement> getCaseMovementList(String username);
+
+    CaseMovement findByCaseId(Long id);
 }
