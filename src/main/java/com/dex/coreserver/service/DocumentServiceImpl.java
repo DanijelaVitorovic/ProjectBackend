@@ -2,15 +2,18 @@ package com.dex.coreserver.service;
 
 import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.Document;
+import com.dex.coreserver.model.DocumentAttachment;
 import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.enums.DocumentStatus;
 import com.dex.coreserver.repository.CaseRepository;
+import com.dex.coreserver.repository.DocumentAttachmentRepository;
 import com.dex.coreserver.repository.DocumentRepository;
 import com.dex.coreserver.repository.EmployeeRepository;
+import com.dex.coreserver.utils.DocumentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.Doc;
 import java.util.*;
 
 @Service
@@ -27,6 +30,12 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Autowired
     private CaseService caseService;
+
+    @Autowired
+    private DocumentAttachmentServiceImpl documentAttachmentService;
+
+    @Autowired
+    private DocumentAttachmentRepository documentAttachmentRepository;
 
     @Override
     public Document create(Document document, String username) {
@@ -86,8 +95,6 @@ public class DocumentServiceImpl implements DocumentService{
         if(verifiedDocument == null) {
             throw new RuntimeException("Dokument ne postoji!");
         }
-        if(!verifiedDocument.getDocumentStatus().equals(DocumentStatus.PROCEEDING))
-            throw new RuntimeException("Dokument nije u statusu podnosenje");
 
         verifiedDocument.setDocumentStatus(DocumentStatus.VERIFICATION);
         verifiedDocument.setVerificationDate(new Date());
@@ -100,8 +107,6 @@ public class DocumentServiceImpl implements DocumentService{
         if(singingDocument != null) {
             throw new RuntimeException("Dokument ne postoji!");
         }
-        if(singingDocument.getDocumentStatus().equals(DocumentStatus.VERIFICATION))
-            throw new RuntimeException("Dokument nije verifikovan!");
 
         singingDocument.setDocumentStatus(DocumentStatus.SIGNING);
         singingDocument.setSigningEmployee(singingDocument.getSigningEmployee());
@@ -113,10 +118,6 @@ public class DocumentServiceImpl implements DocumentService{
     public Document singedDocument(Document singedDocument, String name) {
         if(singedDocument != null) {
             throw new RuntimeException("Dokument ne postoji!");
-        }
-
-        if( singedDocument.getDocumentStatus().equals(DocumentStatus.SIGNING)) {
-            throw new RuntimeException("Dokument nije u statusu potpisivanje!");
         }
 
         singedDocument.setDocumentStatus(DocumentStatus.SIGNED);
@@ -131,14 +132,9 @@ public class DocumentServiceImpl implements DocumentService{
             throw new RuntimeException("Dokument ne postoji!");
         }
 
-        if( finalDocument.getDocumentStatus().equals(DocumentStatus.SIGNED))
-            throw new RuntimeException("Dokument nije potpisan!");
-
         finalDocument.setDocumentStatus(DocumentStatus.FINAL);
         finalDocument.setFinalEmployee(finalDocument.getFinalEmployee());
         finalDocument.setFinalDate(new Date());
         return update(finalDocument, name);
-}
-
-
+    }
 }

@@ -1,5 +1,6 @@
 package com.dex.coreserver.controller;
 
+import com.dex.coreserver.model.Document;
 import com.dex.coreserver.model.DocumentAttachment;
 import com.dex.coreserver.service.DocumentAttachmentService;
 import com.dex.coreserver.service.MapValidationErrorService;
@@ -28,8 +29,8 @@ public class DocumentAttachmentController {
 
     @PostMapping("/upload/{id}")
     public ResponseEntity<?> uploadDocumentAttachment(@RequestParam("file") MultipartFile uploadFile,@PathVariable Long id, Principal principal) {
-        documentAttachmentService.upload(uploadFile, id, principal.getName());
-        return new ResponseEntity<String>("Neka poruka", HttpStatus.CREATED);
+        DocumentAttachment createDocumentAttachment = documentAttachmentService.upload(uploadFile, id, principal.getName());
+        return new ResponseEntity<DocumentAttachment>(createDocumentAttachment, HttpStatus.CREATED);
     }
 
     @GetMapping("/find/{documentName}")
@@ -54,4 +55,5 @@ public class DocumentAttachmentController {
     public ResponseEntity<?> findAll(Principal principal) {
         return new ResponseEntity<List<DocumentAttachment>>(documentAttachmentService.findAll(principal.getName()), HttpStatus.OK);
     }
+
 }
