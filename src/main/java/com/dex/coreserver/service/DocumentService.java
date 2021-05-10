@@ -1,6 +1,7 @@
 package com.dex.coreserver.service;
 
 import com.dex.coreserver.model.Document;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

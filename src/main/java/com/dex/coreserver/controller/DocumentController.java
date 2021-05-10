@@ -3,6 +3,7 @@ package com.dex.coreserver.controller;
 import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.Document;
 import com.dex.coreserver.service.CaseService;
+import com.dex.coreserver.service.DocumentAttachmentServiceImpl;
 import com.dex.coreserver.service.DocumentService;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.Doc;
 import javax.validation.Valid;
@@ -25,6 +27,9 @@ public class DocumentController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private DocumentAttachmentServiceImpl documentAttachmentService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createNewDocument(@Valid @RequestBody Document document, BindingResult result, Principal principal) {
@@ -106,6 +111,5 @@ public class DocumentController {
     public  ResponseEntity<?> finalDocument(@Valid @RequestBody Document document, Principal principal) {
         Document finalDocument = documentService.finalDocument(document, principal.getName());
         return new ResponseEntity<Document>(finalDocument, HttpStatus.CREATED);
-
     }
 }

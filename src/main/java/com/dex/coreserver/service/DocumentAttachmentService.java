@@ -1,5 +1,6 @@
 package com.dex.coreserver.service;
 
+import com.dex.coreserver.model.Document;
 import com.dex.coreserver.model.DocumentAttachment;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,5 +15,5 @@ public interface DocumentAttachmentService extends BasicService<DocumentAttachme
 
     List<DocumentAttachment> findAllByDocument(Long id, String username);
 
-    void upload(MultipartFile uploadFile, Long id, String name);
+    DocumentAttachment upload(MultipartFile uploadFile, Long id, String name);
 }

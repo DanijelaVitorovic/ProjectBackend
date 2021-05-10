@@ -90,7 +90,7 @@ public class DocumentAttachmentServiceImpl implements DocumentAttachmentService{
     }
 
     @Override
-    public void upload(MultipartFile uploadFile, Long id, String username) {
+    public DocumentAttachment upload(MultipartFile uploadFile, Long id, String username) {
         DocumentAttachment documentAttachment = new DocumentAttachment();
 
         documentAttachment.setDocumentName(uploadFile.getOriginalFilename());
@@ -107,7 +107,7 @@ public class DocumentAttachmentServiceImpl implements DocumentAttachmentService{
             throw new RuntimeException("Dokument ne postoji!");
         documentAttachment.setDocument(document);
 
-        documentAttachmentRepository.save(documentAttachment);
         DocumentUtils.saveDocumentOnDisc(randomUUIDString, uploadFile);
+        return documentAttachmentRepository.save(documentAttachment);
     }
 }
