@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
-
-import static com.dex.coreserver.model.CaseMovement.MovementState.RECEIVED;
 import static com.dex.coreserver.model.CaseMovement.MovementState.SENT;
 
 @Service
@@ -75,13 +73,9 @@ public class CaseServiceImpl implements CaseService {
 
         Case caseForUpdate= findById(caseMovement.get_case().getId());
 
-        List<CaseMovement> caseMovementListOfCase = caseMovementRepository.findBy_case(caseForUpdate);
-
-        for(CaseMovement caseMovementFromList: caseMovementListOfCase) {
-            if(caseMovementFromList.getMovementState()== SENT) {
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
                 throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
             }
-        }
 
         User foundUser= userService.findUserByUsername(username);
         Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
@@ -103,12 +97,9 @@ public class CaseServiceImpl implements CaseService {
 
 
             Case caseForUpdate= findById(caseMovement.get_case().getId());
-            List<CaseMovement> caseMovementListOfCase = caseMovementRepository.findBy_case(caseForUpdate);
 
-            for(CaseMovement caseMovementFromList: caseMovementListOfCase) {
-                if(caseMovementFromList.getMovementState()== SENT) {
-                    throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
-                }
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
+            throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
             }
 
             User foundUser= userService.findUserByUsername(username);
