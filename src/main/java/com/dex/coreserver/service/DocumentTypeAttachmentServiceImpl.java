@@ -74,11 +74,21 @@ public class DocumentTypeAttachmentServiceImpl implements DocumentTypeAttachment
             e.printStackTrace();
             return null;
         }
+
+
     }
 
     @Override
     public List<DocumentTypeAttachment> findAllByDocumentType(Long id, String username) {
-        return documentTypeAttachmentRepository.findAllByDocumentType(id);
+        List<DocumentTypeAttachment> allDocumentTypeAttachments = documentTypeAttachmentRepository.findAll();
+        List<DocumentTypeAttachment> documentTypeAttachments = new LinkedList<DocumentTypeAttachment>();
+
+        for(DocumentTypeAttachment attachment: allDocumentTypeAttachments) {
+            if(attachment.getDocumentType().getId() == id) {
+                documentTypeAttachments.add(attachment);
+            }
+        }
+        return documentTypeAttachments;
     }
 
     @Override

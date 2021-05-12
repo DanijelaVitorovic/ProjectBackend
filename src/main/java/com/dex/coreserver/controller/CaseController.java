@@ -60,7 +60,7 @@ public class CaseController {
         return new ResponseEntity<CaseMovement>(updatedCaseMovement,HttpStatus.OK);
     }
 
-    @PostMapping("/addCaseProcessor/{id}")
+    @PostMapping("/addCaseProcessor")
     public ResponseEntity<?> addCaseProcessor(@Valid @RequestBody CaseMovement newCaseMovement,  Principal principal) throws Exception {
         CaseMovement updatedCaseMovement = caseService.addProcessor(newCaseMovement, principal.getName());
         return new ResponseEntity<CaseMovement>(updatedCaseMovement,HttpStatus.OK);

@@ -99,12 +99,6 @@ public class DataLoaderPraksa implements CommandLineRunner {
             newEmployee2.setPhysicalEntity(newPhysicalEntity2);
             employeeRepository.save(newEmployee2);
 
-            Employee newEmployee3 = new Employee();
-            newEmployee3.setManager(true);
-            newEmployee3.setProfession("Profesija 3");
-            newEmployee3.setUser(newUser2);
-            newEmployee3.setPhysicalEntity(newPhysicalEntity3);
-            employeeRepository.save(newEmployee3);
         }
     }
 }

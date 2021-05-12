@@ -1,6 +1,5 @@
 package com.dex.coreserver.controller;
 
-import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.CaseMovement;
 import com.dex.coreserver.repository.CaseMovementRepository;
 import com.dex.coreserver.service.CaseMovementService;
@@ -33,7 +32,7 @@ public class CaseMovementController {
     }
 
     @GetMapping("/findCaseMovementByCaseId/{id}")
-    public CaseMovement findCaseMovementByCaseId(@PathVariable Long id) {
+    public List<CaseMovement> findCaseMovementByCaseId(@PathVariable Long id) {
         return caseMovementService.findByCaseId(id);
     }
 }

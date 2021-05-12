@@ -14,5 +14,9 @@ public interface CaseMovementRepository extends JpaRepository<CaseMovement, Long
     @Query("from CaseMovement where (employeeOwner = :employee or employeeProcessor = :employee) and movementState = :sent")
     List<CaseMovement> findCaseMovementByOwnerOrProcessorIdAndStateSent(@Param("employee") Employee employee,@Param("sent") CaseMovement.MovementState sent);
 
-    CaseMovement findBy_case(Case caseForUpdate);
+    List<CaseMovement> findBy_case(Case caseForUpdate);
+
+    @Query("from CaseMovement where _case = :caseForUpdate and movementState = :sent")
+    List<CaseMovement> findCaseMovementByCaseAndStateSent(@Param("caseForUpdate") Case caseForUpdate,@Param("sent") CaseMovement.MovementState sent);
+
 }

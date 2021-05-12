@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import static com.dex.coreserver.model.CaseMovement.MovementState.SENT;
 
 @Service
 public class CaseServiceImpl implements CaseService {
@@ -72,9 +73,9 @@ public class CaseServiceImpl implements CaseService {
 
         Case caseForUpdate= findById(caseMovement.get_case().getId());
 
-        if(caseMovementRepository.findBy_case(caseForUpdate)!=null){
-            throw new Exception("Vec je dodeljen vlasnik ili je na dodeli");
-        }
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
+                throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
+            }
 
         User foundUser= userService.findUserByUsername(username);
         Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
@@ -95,29 +96,23 @@ public class CaseServiceImpl implements CaseService {
     public CaseMovement addProcessor(CaseMovement caseMovement, String username) throws Exception {
 
 
-        try {
             Case caseForUpdate= findById(caseMovement.get_case().getId());
-            CaseMovement caseMovementForUpdate = caseMovementRepository.findBy_case(caseForUpdate);
+
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
+            throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
+            }
+
+            User foundUser= userService.findUserByUsername(username);
+            Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
             caseForUpdate.setCaseState(Case.CaseState.ASSIGN);
+
+            caseMovement.setEmployeeSend(foundEmployee);
+            caseMovement.setSendTime(new Date());
+            caseMovement.set_case(caseForUpdate);
+            caseMovement.setMovementState(CaseMovement.MovementState.SENT);
             update(caseForUpdate, username);
 
-            if(caseMovementForUpdate==null){
-                throw new Exception("Prvo trebate dodeliti vlasnika");
-            }
-
-            if(caseMovementForUpdate.getEmployeeProcessor()!=null){
-                throw new Exception("Vec je dodeljen obradjivac ili je na dodeli");
-            }
-
-            caseMovementForUpdate.setEmployeeProcessor(caseMovement.getEmployeeProcessor());
-            caseMovementForUpdate.setSendTime(new Date());
-            caseMovementForUpdate.setMovementState(CaseMovement.MovementState.SENT);
-
-            return caseMovementRepository.save(caseMovementForUpdate);
-
-        }
-        catch (Exception ex){
-            throw new Exception("Predmet ne postoji!");
-        }
+            return caseMovementRepository.save(caseMovement);
     }
 }

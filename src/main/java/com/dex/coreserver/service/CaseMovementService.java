@@ -8,5 +8,5 @@ public interface CaseMovementService {
     CaseMovement acceptCase(Long id, String username);
     List<CaseMovement> getCaseMovementList(String username);
 
-    CaseMovement findByCaseId(Long id);
+    List<CaseMovement> findByCaseId(Long id);
 }

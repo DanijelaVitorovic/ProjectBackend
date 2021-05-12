@@ -56,7 +56,7 @@ public class CaseMovementServiceImpl implements CaseMovementService{
     }
 
     @Override
-    public CaseMovement findByCaseId(Long id) {
+    public List<CaseMovement> findByCaseId(Long id) {
         return caseMovementRepository.findBy_case(caseService.findById(id));
     }
 }
