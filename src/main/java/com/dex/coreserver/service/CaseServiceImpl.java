@@ -123,6 +123,5 @@ public class CaseServiceImpl implements CaseService {
             update(caseForUpdate, username);
 
             return caseMovementRepository.save(caseMovement);
-
     }
 }
