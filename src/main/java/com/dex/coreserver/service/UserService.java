@@ -14,5 +14,5 @@ public interface UserService{
     List<User>  deleteUser(Long id,String username);
     User findUserById(Long id, String username);
     User findUserByUsername(String username);
-    Employee findUserByPrincipalUsername(String username);
+    Employee findEmployeeByUserUsername(String username);
 }

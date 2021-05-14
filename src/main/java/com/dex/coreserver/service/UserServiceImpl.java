@@ -92,8 +92,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Employee findUserByPrincipalUsername(String username){
-        User foundUser= userRepository.findByUsername(username);
+    public Employee findEmployeeByUserUsername(String username){
+        User foundUser= findUserByUsername(username);
         Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
         return foundEmployee;
     }

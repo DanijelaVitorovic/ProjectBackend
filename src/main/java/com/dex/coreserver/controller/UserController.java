@@ -105,6 +105,6 @@ public class UserController {
 
     @GetMapping("/findUserByUsername")
     public Employee findUserByUsername(Principal principal) {
-        return userServiceImpl.findUserByPrincipalUsername(principal.getName());
+        return userServiceImpl.findEmployeeByUserUsername(principal.getName());
     }
 }
