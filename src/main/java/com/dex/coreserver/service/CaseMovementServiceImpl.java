@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 import static com.dex.coreserver.model.CaseMovement.MovementState.RECEIVED;
 
 @Service
-public class CaseMovementServiceImpl implements CaseMovementService{
+public class CaseMovementServiceImpl implements CaseMovementService {
 
     @Autowired
     UserService userService;
@@ -28,27 +29,30 @@ public class CaseMovementServiceImpl implements CaseMovementService{
     CaseMovementRepository caseMovementRepository;
 
     @Override
-    public List<CaseMovement> getCaseMovementList(String username){
-        CaseMovement.MovementState sent =CaseMovement.MovementState.SENT;
-        Employee foundEmployee= employeeService.findEmployeeByUser(userService.findUserByUsername(username));
-        List<CaseMovement> listOfCaseMovements= caseMovementRepository.findCaseMovementByOwnerOrProcessorIdAndStateSent(foundEmployee, sent);
+    public List<CaseMovement> getCaseMovementList(String username) {
+        CaseMovement.MovementState sent = CaseMovement.MovementState.SENT;
+        Employee foundEmployee = employeeService.findEmployeeByUser(userService.findUserByUsername(username));
+        List<CaseMovement> listOfCaseMovements = caseMovementRepository.findCaseMovementByOwnerOrProcessorIdAndStateSent(foundEmployee, sent);
 
         return listOfCaseMovements;
     }
 
     @Transactional
     @Override
-    public CaseMovement acceptCase(Long id, String username){
-        CaseMovement caseMovement=caseMovementRepository.findById(id).get();
+    public CaseMovement acceptCase(Long id, String username) {
+        CaseMovement caseMovement = caseMovementRepository.findById(id).get();
 
         caseMovement.setMovementState(RECEIVED);
-        Case acceptedCase= caseMovement.get_case();
+        Case acceptedCase = caseMovement.get_case();
+        caseMovement.setReceivedTime(new Date());
 
-        if(caseMovement.getEmployeeOwner()!=null){
-            acceptedCase.setOwner(caseMovement.getEmployeeOwner()); }
+        if (caseMovement.getEmployeeOwner() != null) {
+            acceptedCase.setOwner(caseMovement.getEmployeeOwner());
+        }
 
-        if(caseMovement.getEmployeeProcessor()!=null){
-            acceptedCase.setProcessor(caseMovement.getEmployeeProcessor()); }
+        if (caseMovement.getEmployeeProcessor() != null) {
+            acceptedCase.setProcessor(caseMovement.getEmployeeProcessor());
+        }
 
         caseService.create(acceptedCase, username);
 

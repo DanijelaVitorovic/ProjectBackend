@@ -1,6 +1,7 @@
 package com.dex.coreserver.service;
 
 import com.dex.coreserver.exceptions.UserEmailException;
+import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.User;
 import com.dex.coreserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    EmployeeService employeeService;
 
     @Override
     public User createUser(User user, String username) {
@@ -87,4 +90,13 @@ public class UserServiceImpl implements UserService {
     public User findUserByUsername(String username){
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public Employee findEmployeeByUserUsername(String username){
+        User foundUser= findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+        return foundEmployee;
+    }
 }
+
+
