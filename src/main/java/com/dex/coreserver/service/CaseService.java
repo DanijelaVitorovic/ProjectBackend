@@ -10,4 +10,7 @@ public interface CaseService extends BasicService<Case> {
     List<Case> deleteByIdAndReturnFindAll(Long id, String username);
     CaseMovement addOwner(CaseMovement newCaseMovement, String username) throws Exception;
     CaseMovement addProcessor(CaseMovement caseMovement, String username) throws Exception;
+
+    @Transactional
+    CaseMovement revokeCaseMovement(Case caseForUpdate, String username) throws Exception;
 }

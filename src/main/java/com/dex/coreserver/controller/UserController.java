@@ -1,5 +1,6 @@
 package com.dex.coreserver.controller;
 
+import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.User;
 import com.dex.coreserver.payload.JWTLoginSuccessResponse;
 import com.dex.coreserver.payload.LoginRequest;
@@ -100,5 +101,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<User> deleteUser(@PathVariable Long id, Principal principal){
         return userServiceImpl.deleteUser(id,principal.getName());
+    }
+
+    @GetMapping("/findUserByUsername")
+    public Employee findUserByUsername(Principal principal) {
+        return userServiceImpl.findUserByPrincipalUsername(principal.getName());
     }
 }

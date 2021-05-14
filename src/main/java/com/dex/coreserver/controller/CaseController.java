@@ -65,4 +65,10 @@ public class CaseController {
         CaseMovement updatedCaseMovement = caseService.addProcessor(newCaseMovement, principal.getName());
         return new ResponseEntity<CaseMovement>(updatedCaseMovement,HttpStatus.OK);
     }
+
+    @PostMapping("/revokeCaseMovement")
+    public ResponseEntity<?> revokingCaseMovement(@Valid @RequestBody Case caseForUpdate,  Principal principal) throws Exception {
+        CaseMovement newCaseMovement = caseService.revokeCaseMovement(caseForUpdate, principal.getName());
+        return new ResponseEntity<CaseMovement>(newCaseMovement,HttpStatus.OK);
+    }
 }

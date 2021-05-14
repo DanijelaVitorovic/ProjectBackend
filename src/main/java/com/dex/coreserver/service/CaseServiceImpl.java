@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+
+import static com.dex.coreserver.model.CaseMovement.MovementState.REVOKED;
 import static com.dex.coreserver.model.CaseMovement.MovementState.SENT;
 
 @Service
@@ -73,7 +75,7 @@ public class CaseServiceImpl implements CaseService {
 
         Case caseForUpdate= findById(caseMovement.get_case().getId());
 
-            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT) != null) {
                 throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
             }
 
@@ -98,7 +100,7 @@ public class CaseServiceImpl implements CaseService {
 
             Case caseForUpdate= findById(caseMovement.get_case().getId());
 
-            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT).size() != 0) {
+            if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT) != null) {
             throw new Exception("Nazalost vas predmet je u nekom drugom procesu dodele");
             }
 
@@ -115,4 +117,20 @@ public class CaseServiceImpl implements CaseService {
 
             return caseMovementRepository.save(caseMovement);
     }
+
+    @Transactional
+    @Override
+    public CaseMovement revokeCaseMovement(Case caseForUpdate, String username) throws Exception {
+
+
+        if(caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT) == null) {
+            throw new Exception("Ne postoji predmet za povlačenje zahteva");
+        }
+
+        CaseMovement caseMovement= caseMovementRepository.findCaseMovementByCaseAndStateSent(caseForUpdate, SENT);
+        caseForUpdate.setCaseState(Case.CaseState.REVOKE);
+        caseMovement.setMovementState(CaseMovement.MovementState.REVOKED);
+        update(caseForUpdate, username);
+        return caseMovementRepository.save(caseMovement);
+        }
 }
