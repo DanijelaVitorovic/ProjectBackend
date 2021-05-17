@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Data
@@ -20,4 +21,6 @@ public class ProcessType extends AbstractDataModel{
     @Column
     @Size(max = 2000)
     private String description;
+
+    private int deadline;
 }

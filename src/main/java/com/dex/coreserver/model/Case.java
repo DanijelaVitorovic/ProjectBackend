@@ -5,7 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @Entity
@@ -58,4 +63,16 @@ public class Case extends AbstractDataModel{
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="RefersTo")
     private PhysicalEntity refersTo;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name="Process")
+    private Process process;
+
+    @Transient
+    private int remainingDays;
+
+    @PrePersist
+    protected void onCreate(){
+        this.startDate = new Date();
+    }
 }

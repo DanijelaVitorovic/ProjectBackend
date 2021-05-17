@@ -87,15 +87,19 @@ public class DocumentServiceImpl implements DocumentService{
         Case createdCase = caseService.create(newCase, username);
         document.set_case(createdCase);
         Document createdDocument = create(document, username);
+        createdDocument.setDocumentStatus(DocumentStatus.PROCEEDING);
         return createdDocument;
     }
 
     @Override
-    public Document verificationDocument(Document verifiedDocument, String name) {
-        if(verifiedDocument == null) {
+    public Document verificationDocument(Document document, String name) {
+        if(document == null) {
             throw new RuntimeException("Dokument ne postoji!");
         }
+        if(!document.getDocumentStatus().equals(DocumentStatus.PROCEEDING))
+            throw new RuntimeException("Dokument nije u statusu podnosenje");
 
+        Document verifiedDocument = document;
         verifiedDocument.setDocumentStatus(DocumentStatus.VERIFICATION);
         verifiedDocument.setVerificationDate(new Date());
         verifiedDocument.setVerificationEmployee(verifiedDocument.getVerificationEmployee());
@@ -104,9 +108,11 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     public Document singingDocument(Document singingDocument, String name) {
-        if(singingDocument != null) {
+        if(singingDocument == null) {
             throw new RuntimeException("Dokument ne postoji!");
         }
+        if(!singingDocument.getDocumentStatus().equals(DocumentStatus.VERIFICATION))
+            throw new RuntimeException("Dokument nije verifikovan!");
 
         singingDocument.setDocumentStatus(DocumentStatus.SIGNING);
         singingDocument.setSigningEmployee(singingDocument.getSigningEmployee());
@@ -116,8 +122,12 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     public Document singedDocument(Document singedDocument, String name) {
-        if(singedDocument != null) {
+        if(singedDocument == null) {
             throw new RuntimeException("Dokument ne postoji!");
+        }
+
+        if( !singedDocument.getDocumentStatus().equals(DocumentStatus.SIGNING)) {
+            throw new RuntimeException("Dokument nije u statusu potpisivanje!");
         }
 
         singedDocument.setDocumentStatus(DocumentStatus.SIGNED);
@@ -128,9 +138,12 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     public Document finalDocument(Document finalDocument, String name) {
-        if(finalDocument != null) {
+        if(finalDocument == null) {
             throw new RuntimeException("Dokument ne postoji!");
         }
+
+        if( !finalDocument.getDocumentStatus().equals(DocumentStatus.SIGNED))
+            throw new RuntimeException("Dokument nije potpisan!");
 
         finalDocument.setDocumentStatus(DocumentStatus.FINAL);
         finalDocument.setFinalEmployee(finalDocument.getFinalEmployee());

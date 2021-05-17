@@ -29,8 +29,8 @@ public class DocumentAttachmentController {
 
     @PostMapping("/upload/{id}")
     public ResponseEntity<?> uploadDocumentAttachment(@RequestParam("file") MultipartFile uploadFile,@PathVariable Long id, Principal principal) {
-        DocumentAttachment createDocumentAttachment = documentAttachmentService.upload(uploadFile, id, principal.getName());
-        return new ResponseEntity<DocumentAttachment>(createDocumentAttachment, HttpStatus.CREATED);
+        DocumentAttachment createdDocumentAttachment = documentAttachmentService.upload(uploadFile, id, principal.getName());
+        return new ResponseEntity<DocumentAttachment>(createdDocumentAttachment, HttpStatus.CREATED);
     }
 
     @GetMapping("/find/{documentName}")

@@ -1,11 +1,14 @@
 package com.dex.coreserver.service;
 
 import com.dex.coreserver.model.*;
+import com.dex.coreserver.model.Process;
 import com.dex.coreserver.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,13 +36,21 @@ public class CaseServiceImpl implements CaseService {
     @Autowired
     private PhysicalEntityRepository physicalEntityRepository;
 
+    @Autowired
+    private ProcessService processService;
+
     @Override
     public Case create(Case newCase, String username) {
-
         User foundUser= userService.findUserByUsername(username);
         Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
         newCase.setOwner(foundEmployee);
         newCase.setCaseState(Case.CaseState.TAKEOVER);
+
+        ProcessType processType = newCase.getProcess().getProcessType();
+        Process process = new Process();
+        process.setProcessType(processType);
+        Process createdProcess = processService.create(process, username);
+        newCase.setProcess(createdProcess);
 
         return caseRepository.save(newCase);
     }
@@ -55,12 +66,38 @@ public class CaseServiceImpl implements CaseService {
 
     @Override
     public List<Case> findAll(String username) {
+        List<Case> cases = caseRepository.findAll();
+        addCaseRemainingDays(cases, username);
         return caseRepository.findAll();
     }
 
     @Override
     public Case findById(Long id) {
         return caseRepository.findById(id).get();
+    }
+
+    private Case setCaseRemainingDays(Case _case, String username) {
+
+        Calendar deadline = Calendar.getInstance();
+        deadline.setTime(_case.getStartDate());
+
+        deadline.add(Calendar.DAY_OF_MONTH, _case.getProcess().getProcessType().getDeadline());
+        Calendar now = Calendar.getInstance();
+        Date currentDate = now.getTime();
+        Date deadlineDate = deadline.getTime();
+
+        int diff = (int)((deadlineDate.getTime() - currentDate.getTime()) / (1000*60*60*24)) % 365;
+        _case.setRemainingDays(diff);
+        return _case;
+    }
+
+    private List<Case> addCaseRemainingDays(List<Case> cases, String username) {
+
+        for(Case c: cases) {
+            setCaseRemainingDays(c, username);
+        }
+
+        return cases;
     }
 
     @Override
