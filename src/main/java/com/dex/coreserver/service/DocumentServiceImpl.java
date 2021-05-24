@@ -1,9 +1,6 @@
 package com.dex.coreserver.service;
 
-import com.dex.coreserver.model.Case;
-import com.dex.coreserver.model.Document;
-import com.dex.coreserver.model.DocumentAttachment;
-import com.dex.coreserver.model.Employee;
+import com.dex.coreserver.model.*;
 import com.dex.coreserver.model.enums.DocumentStatus;
 import com.dex.coreserver.repository.CaseRepository;
 import com.dex.coreserver.repository.DocumentAttachmentRepository;
@@ -37,16 +34,26 @@ public class DocumentServiceImpl implements DocumentService{
     @Autowired
     private DocumentAttachmentRepository documentAttachmentRepository;
 
+    @Autowired
+    private DocuemntClassificationService docuemntClassificationService;
+
     @Override
     public Document create(Document document, String username) {
         Employee employee = employeeRepository.findById(document.getEmployeeCreated().getId()).get();
         if(employee == null)
             throw new RuntimeException("Zaposleni ne psotoji");
         document.setEmployeeCreated(employee);
+
         Case _case = caseRepository.findById(document.get_case().getId()).get();
         if(_case == null)
             throw new RuntimeException("Slucaj ne postoji");
         document.set_case(_case);
+
+        DocumentClassification documentClassification = docuemntClassificationService.findById(document.getDocumentClassification().getId());
+        if(documentClassification == null)
+            throw new RuntimeException("Klasifikacija ne postoji");
+        document.setDocumentClassification(documentClassification);
+
         return documentRepository.save(document);
     }
 
@@ -54,8 +61,13 @@ public class DocumentServiceImpl implements DocumentService{
     public Document update(Document document, String username) {
         Employee employee = employeeRepository.findById(document.getEmployeeCreated().getId()).get();
         document.setEmployeeCreated(employee);
+
         Case _case = caseRepository.findById(document.get_case().getId()).get();
         document.set_case(_case);
+
+        DocumentClassification documentClassification = docuemntClassificationService.findById(document.getDocumentClassification().getId());
+        document.setDocumentClassification(documentClassification);
+
         return documentRepository.save(document);
     }
 
