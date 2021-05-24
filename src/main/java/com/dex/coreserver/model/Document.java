@@ -27,6 +27,11 @@ public class Document extends AbstractDataModel{
     private  Case _case;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="documentClassification")
+    private DocumentClassification documentClassification;
+
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employeeCreated")
     private Employee employeeCreated;
     private Date dateCreate;
