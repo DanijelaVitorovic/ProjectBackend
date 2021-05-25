@@ -1,19 +1,16 @@
 package com.dex.coreserver.controller;
 
-import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.Document;
-import com.dex.coreserver.service.CaseService;
 import com.dex.coreserver.service.DocumentAttachmentServiceImpl;
 import com.dex.coreserver.service.DocumentService;
 import com.dex.coreserver.service.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.Doc;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -111,5 +108,16 @@ public class DocumentController {
     public  ResponseEntity<?> finalDocument(@Valid @RequestBody Document document, Principal principal) {
         Document finalDocument = documentService.finalDocument(document, principal.getName());
         return new ResponseEntity<Document>(finalDocument, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAllDocuments/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<Document>> getAllDocuments(
+            @PathVariable Integer pageNo,
+            @PathVariable Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy)
+    {
+        Page<Document> documentList = documentService.getAllDocuments(pageNo, pageSize, sortBy);
+
+        return new ResponseEntity<Page<Document>>(documentList, HttpStatus.OK);
     }
 }

@@ -1,15 +1,20 @@
 package com.dex.coreserver.service;
 
+import com.dex.coreserver.model.Case;
+import com.dex.coreserver.model.Document;
+import com.dex.coreserver.model.Employee;
 import com.dex.coreserver.model.*;
 import com.dex.coreserver.model.enums.DocumentStatus;
 import com.dex.coreserver.repository.CaseRepository;
 import com.dex.coreserver.repository.DocumentAttachmentRepository;
 import com.dex.coreserver.repository.DocumentRepository;
 import com.dex.coreserver.repository.EmployeeRepository;
-import com.dex.coreserver.utils.DocumentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -101,6 +106,14 @@ public class DocumentServiceImpl implements DocumentService{
         Document createdDocument = create(document, username);
         createdDocument.setDocumentStatus(DocumentStatus.PROCEEDING);
         return createdDocument;
+    }
+
+    @Override
+    public Page<Document> getAllDocuments(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Document> pagedResult = documentRepository.findAll(paging);
+        return pagedResult;
     }
 
     @Override
