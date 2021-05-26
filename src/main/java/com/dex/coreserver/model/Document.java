@@ -1,5 +1,6 @@
 package com.dex.coreserver.model;
 
+import com.dex.coreserver.model.enums.DocumentStatement;
 import com.dex.coreserver.model.enums.DocumentStatus;
 import com.dex.coreserver.model.enums.DocumentType;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class Document extends AbstractDataModel{
     private String description;
     private DocumentType documentType;
     private DocumentStatus documentStatus;
+    private DocumentStatement documentStatement;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "caseId")

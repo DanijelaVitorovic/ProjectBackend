@@ -1,5 +1,12 @@
 package com.dex.coreserver.service;
 
+
+import com.dex.coreserver.model.*;
+import com.dex.coreserver.model.enums.DocumentMovementStatement;
+import com.dex.coreserver.model.enums.DocumentStatement;
+import com.dex.coreserver.model.enums.DocumentStatus;
+import com.dex.coreserver.repository.*;
+import com.dex.coreserver.utils.DocumentUtils;
 import com.dex.coreserver.model.Case;
 import com.dex.coreserver.model.Document;
 import com.dex.coreserver.model.Employee;
@@ -16,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -40,7 +48,20 @@ public class DocumentServiceImpl implements DocumentService{
     private DocumentAttachmentRepository documentAttachmentRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private DocumentMovementRepository documentMovementRepository;
+
+    @Autowired
+    private DocumentMovementService documentMovementService;
+
+    @Autowired
     private DocuemntClassificationService docuemntClassificationService;
+
 
     @Override
     public Document create(Document document, String username) {
@@ -175,4 +196,163 @@ public class DocumentServiceImpl implements DocumentService{
         finalDocument.setFinalDate(new Date());
         return update(finalDocument, name);
     }
+
+    @Transactional
+    @Override
+    public DocumentMovement acceptVerification(DocumentMovement documentMovement, String username) {
+
+        if(documentMovement.getDocument() == null || documentRepository.findById(documentMovement.getDocument().getId()) == null)
+            throw new RuntimeException("Документ не постоји.");
+
+        Document updateDocument= findById(documentMovement.getDocument().getId());
+
+        if(documentMovementRepository.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT) != null) {
+            List<DocumentMovement> documentMovementList = documentMovementRepository.findAll();
+
+            for(DocumentMovement dm : documentMovementList) {
+                if(dm.getDocument().getId() == updateDocument.getId())
+                    throw new RuntimeException("Ваш документ је у стању: " + dm.getDocumentMovementStatement());
+            }
+        }
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
+        updateDocument.setDocumentStatement(DocumentStatement.ASSIGN);
+
+        documentMovement.setVerificationEmployee(documentMovement.getVerificationEmployee());
+        documentMovement.setVerificationDate(new Date());
+
+        documentMovement.setEmployeeSend(foundEmployee);
+        documentMovement.setEmployeeReceived(documentMovement.getVerificationEmployee());
+
+        documentMovement.setDocument(updateDocument);
+        documentMovement.setDocumentMovementStatement(DocumentMovementStatement.SENT);
+        update(updateDocument, username);
+
+        return documentMovementService.create(documentMovement, username);
+    }
+
+    @Transactional
+    @Override
+    public DocumentMovement acceptSinging(DocumentMovement documentMovement, String username) {
+
+        if(documentMovement.getDocument() == null || documentRepository.findById(documentMovement.getDocument().getId()) == null)
+            throw new RuntimeException("Документ не постоји.");
+
+        Document updateDocument= findById(documentMovement.getDocument().getId());
+
+        if(documentMovementRepository.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT) != null) {
+            List<DocumentMovement> documentMovementList = documentMovementRepository.findAll();
+
+            for(DocumentMovement dm : documentMovementList) {
+                if(dm.getDocument().getId() == updateDocument.getId())
+                    throw new RuntimeException("Ваш документ је у стању: " + dm.getDocumentMovementStatement());
+            }
+        }
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
+        updateDocument.setDocumentStatement(DocumentStatement.ASSIGN);
+
+        documentMovement.setSigningEmployee(foundEmployee);
+        documentMovement.setSigningDate(new Date());
+
+        documentMovement.setEmployeeSend(foundEmployee);
+        documentMovement.setEmployeeReceived(documentMovement.getSigningEmployee());
+
+        documentMovement.setDocument(updateDocument);
+        documentMovement.setDocumentMovementStatement(DocumentMovementStatement.SENT);
+        update(updateDocument, username);
+
+        return documentMovementService.create(documentMovement, username);
+    }
+
+    @Transactional
+    @Override
+    public DocumentMovement acceptSinged(DocumentMovement documentMovement, String username) {
+
+        if(documentMovement.getDocument() == null || documentRepository.findById(documentMovement.getDocument().getId()) == null)
+            throw new RuntimeException("Документ не постоји.");
+
+        Document updateDocument= findById(documentMovement.getDocument().getId());
+
+        if(documentMovementRepository.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT) != null) {
+            List<DocumentMovement> documentMovementList = documentMovementRepository.findAll();
+
+            for(DocumentMovement dm : documentMovementList) {
+                if(dm.getDocument().getId() == updateDocument.getId())
+                    throw new RuntimeException("Ваш документ је у стању: " + dm.getDocumentMovementStatement());
+            }
+        }
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
+        updateDocument.setDocumentStatement(DocumentStatement.ASSIGN);
+
+        documentMovement.setSignedEmployee(foundEmployee);
+        documentMovement.setSignedDate(new Date());
+
+        documentMovement.setEmployeeSend(foundEmployee);
+        documentMovement.setEmployeeReceived(documentMovement.getSignedEmployee());
+
+        documentMovement.setDocument(updateDocument);
+        documentMovement.setDocumentMovementStatement(DocumentMovementStatement.SENT);
+        update(updateDocument, username);
+
+        return documentMovementService.create(documentMovement, username);
+    }
+
+    @Transactional
+    @Override
+    public DocumentMovement acceptFinal(DocumentMovement documentMovement, String username) {
+
+        if(documentMovement.getDocument() == null || documentRepository.findById(documentMovement.getDocument().getId()) == null)
+            throw new RuntimeException("Документ не постоји.");
+
+        Document updateDocument= findById(documentMovement.getDocument().getId());
+
+        if(documentMovementRepository.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT) != null) {
+            List<DocumentMovement> documentMovementList = documentMovementRepository.findAll();
+
+            for(DocumentMovement dm : documentMovementList) {
+                if(dm.getDocument().getId() == updateDocument.getId())
+                    throw new RuntimeException("Ваш документ је у стању: " + dm.getDocumentMovementStatement());
+            }
+        }
+
+        User foundUser= userService.findUserByUsername(username);
+        Employee foundEmployee= employeeService.findEmployeeByUser(foundUser);
+
+        updateDocument.setDocumentStatement(DocumentStatement.ASSIGN);
+
+        documentMovement.setFinalEmployee(foundEmployee);
+        documentMovement.setFinalDate(new Date());
+
+        documentMovement.setEmployeeSend(foundEmployee);
+        documentMovement.setEmployeeReceived(documentMovement.getFinalEmployee());
+
+        documentMovement.setDocument(updateDocument);
+        documentMovement.setDocumentMovementStatement(DocumentMovementStatement.SENT);
+        update(updateDocument, username);
+
+        return documentMovementService.create(documentMovement, username);
+    }
+
+    @Transactional
+    @Override
+    public DocumentMovement revokeDocumentMovement(Document updateDocument, String username) throws Exception {
+        if(documentMovementService.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT) == null) {
+            throw new Exception("Не постоји захтев за повлачење!");
+        }
+
+        DocumentMovement documentMovement = documentMovementService.findDocumentMovementByDocumentAndStateSent(updateDocument, DocumentMovementStatement.SENT);
+        updateDocument.setDocumentStatement(DocumentStatement.REVOKE);
+        documentMovement.setDocumentMovementStatement(DocumentMovementStatement.REVOKED);
+        update(updateDocument, username);
+        return documentMovementService.create(documentMovement, username);
+    }
+
 }

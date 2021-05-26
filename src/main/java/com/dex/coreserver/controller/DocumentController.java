@@ -1,6 +1,8 @@
 package com.dex.coreserver.controller;
 
 import com.dex.coreserver.model.Document;
+import com.dex.coreserver.model.DocumentMovement;
+import com.dex.coreserver.service.CaseService;
 import com.dex.coreserver.service.DocumentAttachmentServiceImpl;
 import com.dex.coreserver.service.DocumentService;
 import com.dex.coreserver.service.MapValidationErrorService;
@@ -108,6 +110,30 @@ public class DocumentController {
     public  ResponseEntity<?> finalDocument(@Valid @RequestBody Document document, Principal principal) {
         Document finalDocument = documentService.finalDocument(document, principal.getName());
         return new ResponseEntity<Document>(finalDocument, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addDocumentVerificationEmployee")
+    public ResponseEntity<?> addDocumentVerificationEmployee(@Valid @RequestBody DocumentMovement documentMovement, Principal principal) {
+        DocumentMovement updatedDocumentMovement = documentService.acceptVerification(documentMovement, principal.getName());
+        return new ResponseEntity<DocumentMovement>(updatedDocumentMovement,HttpStatus.OK);
+    }
+
+    @PostMapping("/addDocumentSingingEmployee")
+    public ResponseEntity<?> addDocumentSingingEmployee(@Valid @RequestBody DocumentMovement documentMovement, Principal principal) {
+        DocumentMovement updatedDocumentMovement = documentService.acceptSinging(documentMovement, principal.getName());
+        return new ResponseEntity<DocumentMovement>(updatedDocumentMovement,HttpStatus.OK);
+    }
+
+    @PostMapping("/addDocumentSingedEmployee")
+    public ResponseEntity<?> addDocumentSingedEmployee(@Valid @RequestBody DocumentMovement documentMovement, Principal principal) {
+        DocumentMovement updatedDocumentMovement = documentService.acceptSinged(documentMovement, principal.getName());
+        return new ResponseEntity<DocumentMovement>(updatedDocumentMovement,HttpStatus.OK);
+    }
+
+    @PostMapping("/addDocumentFinalEmployee")
+    public ResponseEntity<?> addDocumentFinalEmployee(@Valid @RequestBody DocumentMovement documentMovement, Principal principal) {
+        DocumentMovement updatedDocumentMovement = documentService.acceptFinal(documentMovement, principal.getName());
+        return new ResponseEntity<DocumentMovement>(updatedDocumentMovement,HttpStatus.OK);
     }
 
     @GetMapping("/getAllDocuments/{pageNo}/{pageSize}")
