@@ -13,9 +13,6 @@ import java.util.List;
 public class DataLoaderPraksa implements CommandLineRunner {
 
     @Autowired
-    private CaseClassificationRepository caseClassificationRepository;
-
-    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
